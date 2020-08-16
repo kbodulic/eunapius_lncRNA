@@ -4,6 +4,7 @@ library(stringr)
 library(ggplot2)
 library(gameofthrones)
 library(harrypotter)
+library(tidyr)
 setwd(".")
 
 #analyzing the expression - calculating FPKM for every gene, comparing day 1 to day10 expression levels, comparing the expression levels of lncRNAs with a transposone insertions in one of their elements and lncRNAs without transposone insertions, comparing expression levels of protein with and without a relationship to a lncRNA

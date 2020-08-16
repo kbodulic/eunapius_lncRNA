@@ -3,6 +3,7 @@ library(data.table)
 library(IRanges)
 library(GenomicRanges)
 library(DescTools)
+library(dplyr)
 library(ggplot2)
 setwd(".")
 # finding the lncRNA consensus - R script which reduces transcripts to genes, finds unique genes and between-transcriptome gene overlaps, takes only unique genes, longer genes from overlaps longer than 20% of the length of the longer gene in the pair and longer + shorter genes from overlaps shorter than 20% of the length of the longer gene in the pair
