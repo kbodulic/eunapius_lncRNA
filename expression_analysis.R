@@ -8,18 +8,18 @@ library(tidyr)
 setwd(".")
 
 #analyzing the expression - calculating FPKM for every gene, comparing day 1 to day10 expression levels, comparing the expression levels of lncRNAs with a transposone insertions in one of their elements and lncRNAs without transposone insertions, comparing expression levels of protein with and without a relationship to a lncRNA
-#Arguments: 1 - counts table for day1 and day10 genes, 2 - lncRNA classification table, 3 - a table which maps longest lncRNA isoform to a gene_id, 4 - a table with transposone and lncRNA overlaps, 5 - paf of lncRNA longest isoforms, 6 - protein classification table based on the relationship with lncRNA genes
+#Arguments: 1 - counts table for day1 and day10 genes, 2 - total number of mapped reads table, 3 -  lncRNA classification table, 4 - a table which maps longest lncRNA isoform to a gene_id, 5 - a table with transposone and lncRNA overlaps, 6 - paf of lncRNA longest isoforms, 7 - protein classification table based on the relationship with lncRNA genes
 read_counts_table<-fread(args[1])
-lncRNA_classification_table<-fread(args[2])
-isoform_map_table_together<-fread(args[3])
-lncrna_repeat_overlap_category_20_class_merged<-fread(args[4])
-filtered_together_paf_union<-fread(args[5])
-prot_classification_table<-fread(args[6])
+total_counts_table<-fread(args[2])
+lncRNA_classification_table<-fread(args[3])
+isoform_map_table_together<-fread(args[4])
+lncrna_repeat_overlap_category_20_class_merged<-fread(args[5])
+filtered_together_paf_union<-fread(args[6])
+prot_classification_table<-fread(args[7])
 
 #calculating FPKMs
 read_counts_table<-read_counts_table[,.SD,.SDcols=c("Geneid","Length","sorted_noPCR_RNAseq_day1_to_Esu_geonme.bam","sorted_noPCR_RNAseq_day10_to_Esu_geonme.bam")]
 setnames(read_counts_table,c("gene_id","gene_length","counts_day1","counts_day10"))
-total_counts_table<-fread("total_mapped_counts.txt")
 setnames(total_counts_table,"counts")
 total_counts_table[,experiment:=c("day1","day10")]
 read_counts_table<-read_counts_table[counts_day1 !=0]

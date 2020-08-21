@@ -110,7 +110,7 @@ SAMBAMBA=/path/to/sambamba
 
 ls | grep reads_to_genome | $PARALLEL $SAMBAMBA view -t 12 -f bam -S -o {.}.bam {}
 ls | grep reads_to_genome.bam | $PARALLEL $SAMBAMBA sort -m 80GB --tmpdir tmp -t 12 {}
-
+ls | grep reads_to_genome.sorted.bam | $PARALLEL $SAMTOOLS flagstat ">" {.}_flagstat.txt
 
 #defining the annotation file for FeatureCounts (SAF) - holds lncRNA and protein genes
 
@@ -123,10 +123,17 @@ FEATURECOUNTS=/path/to/featurecounts
 
 $FEATURECOUNTS -a lncrna_and_prot_annotation.saf -o day1_day10_rna_to_genome_counts.txt  day1_reads_to_genome.sorted.bam day10_reads_to_genome.sorted.bam -F SAF -p  -T 10
 
-#analyzing the expression - calculating FPKM for every gene, comparing day 1 to day10 expression levels, comparing the expression levels of lncRNAs with a transposone insertions in one of their elements and lncRNAs without transposone insertions, comparing expression levels of protein with and without a relationship to a lncRNA
-#Arguments: 1 - counts table for day1 and day10 genes, 2 - lncRNA classification table, 3 - a table which maps longest lncRNA isoform to a gene_id, 4 - a table with transposone and lncRNA overlaps, 5 - paf of lncRNA longest isoforms, 6 - protein classification table based on the relationship with lncRNA genes
+#total number of mapped reads for both libraries
 
-Rscript expression_analysis.R day1_day10_rna_to_genome_counts.txt $LNCRNA_CLASSIFICATION_TABLE $LNCRNA_ISOFORM_MAP_TABLE $LNCRNA_TRANSPOSONES_OVERLAP_TABLE $TOGETHER_LONGEST_ISO_PAF $PROTEIN_CLASSIFICATION_TABLE
+ls | grep reads_to_genome.sorted_flagstat.bam | $PARALLEL cat {} | grep -Po ".*(?= \+ 0 mapped)" ">" {.}_total_reads.txt
+
+ls | grep total_reads.txt | xargs cat > total_counts_table.txt
+TOTAL_COUNTS_TABLE=total_counts_table.txt
+
+#analyzing the expression - calculating FPKM for every gene, comparing day 1 to day10 expression levels, comparing the expression levels of lncRNAs with a transposone insertions in one of their elements and lncRNAs without transposone insertions, comparing expression levels of protein with and without a relationship to a lncRNA
+#Arguments: 1 - counts table for day1 and day10 genes, 2 - total number of mapped reads table, 3 -  lncRNA classification table, 4 - a table which maps longest lncRNA isoform to a gene_id, 5 - a table with transposone and lncRNA overlaps, 6 - paf of lncRNA longest isoforms, 7 - protein classification table based on the relationship with lncRNA genes
+
+Rscript expression_analysis.R day1_day10_rna_to_genome_counts.txt $TOTAL_COUNTS_TABLE $LNCRNA_CLASSIFICATION_TABLE $LNCRNA_ISOFORM_MAP_TABLE $LNCRNA_TRANSPOSONES_OVERLAP_TABLE $TOGETHER_LONGEST_ISO_PAF $PROTEIN_CLASSIFICATION_TABLE
 
 #conservation analysis inside phylum Porifera
 
@@ -230,31 +237,3 @@ cp randfold_together_longest_iso_revcomp.txt .. && cd ..
 #randfold results analysis - take the lower p-value for each sequence-revcomp pair + make a distribution histogram of p-values + compare distributions of p-values across lncRNA classes
 #Arguments: 1 - randfold results, 2 - randfold_revcomplement results, 3 - lncRNA classification table
 Rscript randfold_analysis.R randfold_together_longest_iso.txt randfold_together_longest_iso_revcomp.txt $LNCRNA_CLASSIFICATION_TABLE
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
