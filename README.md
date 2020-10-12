@@ -4,7 +4,7 @@ R and bash code for the Master's Thesis "Computational analysis of long non-codi
 
 ## File description:
 
-**Master.bash** - executes every step of the analysis
+**master.bash** - executes every step of the analysis
 
 
 
