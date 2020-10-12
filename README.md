@@ -1,12 +1,14 @@
 # eunapius_lncRNA
 R and bash code for the Master's Thesis "Computational analysis of long non-coding RNA in endemic cave sponge (Eunapius subterraneus)", K. Bodulić, 2020
 
-File description:
+
+##File description:
+
 Master script: Master.bash - executes every step of the analysis
 
 
 
-lncRNA extraction pipeline:
+##lncRNA extraction pipeline:
 
 filter_rrna_and_length.R - filters rRNA transcripts + transcripts shorter than 200 bp
 
@@ -21,7 +23,7 @@ mapping_filtering.R - filters transcripts based on mapping to genome (removes tr
 find_consensus.R - finds a miminal-overlapping consensus of lncRNA assembled with rnaSPAdes and Trinity
 
 
-lncRNA analysis scripts:
+#lncRNA analysis scripts:
 
 main_features.R - analyses the main features of found lncRNA-coding genes comparing them to protein-coding genes(isoform numbers, exon numbers, exon, intron, transcript and gene lengths, splice sites, GC content)
 
@@ -42,7 +44,7 @@ randfold_analysis.R - analysis the 2D structures of found lncRNAs (takes the low
 
 
 
-Helper scripts:
+##Helper scripts:
 
 exons.R - finds the exonic coordinates of genome-mapped transcripts
 
